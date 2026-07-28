@@ -2,10 +2,10 @@ import axios, {
   type InternalAxiosRequestConfig,
   type AxiosResponse,
 } from 'axios';
-import router from '../router';
+import router from '@/router';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://asset-tracker-api.up.railway.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
