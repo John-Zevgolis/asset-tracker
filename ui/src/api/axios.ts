@@ -5,7 +5,8 @@ import axios, {
 import router from '@/router';
 
 const api = axios.create({
-  baseURL: '/api',
+  // baseURL: '/api',
+  baseURL: 'https://asset-tracker-api.up.railway.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
