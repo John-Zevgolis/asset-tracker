@@ -39,11 +39,18 @@ A modern, full-stack, containerized web application designed for tracking, manag
 The entire application (Backend, Frontend, and Nginx Reverse Proxy) can be launched with a single command without needing Java, Node.js, or local database installations.
 
 ### **Prerequisites**
+
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 
 ### **Quick Start**
 
+To build and launch the entire application stack:
+
+```bash
 docker compose up --build
+```
+
+---
 
 ## 📦 Project Structure
 
@@ -59,3 +66,4 @@ asset-tracker/
 │   ├── package.json            # Node.js dependencies
 │   └── Dockerfile              # Multi-stage Node/Nginx build definition
 └── docker-compose.yml          # Multi-container orchestration config
+```
