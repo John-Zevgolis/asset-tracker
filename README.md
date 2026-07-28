@@ -43,7 +43,19 @@ The entire application (Backend, Frontend, and Nginx Reverse Proxy) can be launc
 
 ### **Quick Start**
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/asset-tracker.git](https://github.com/YOUR_USERNAME/asset-tracker.git)
-   cd asset-tracker
+docker compose up --build
+
+## 📦 Project Structure
+
+```text
+asset-tracker/
+├── api/                        # Spring Boot Backend Service
+│   ├── src/                    # Java source code & application properties
+│   ├── pom.xml                 # Maven dependencies
+│   └── Dockerfile              # Multi-stage Java 21 build definition
+├── ui/                         # Vue.js Frontend Service
+│   ├── src/                    # Vue components, router & Axios setup
+│   ├── nginx.conf              # Nginx reverse proxy & SPA routing setup
+│   ├── package.json            # Node.js dependencies
+│   └── Dockerfile              # Multi-stage Node/Nginx build definition
+└── docker-compose.yml          # Multi-container orchestration config
