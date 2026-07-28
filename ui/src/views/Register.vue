@@ -1,0 +1,153 @@
+<template>
+  <div
+    class="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8"
+  >
+    <div
+      class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100"
+    >
+      <div>
+        <h2 class="text-center text-3xl font-extrabold text-gray-900">
+          Create Account
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Manage your assets and employees efficiently
+        </p>
+      </div>
+      <div
+        v-if="generalError"
+        class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm"
+      >
+        {{ generalError }}
+      </div>
+      <form class="mt-8 space-y-5" @submit.prevent.stop="handleRegister">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Full Name</label
+          >
+          <input
+            v-model="formData.fullName"
+            type="text"
+            placeholder="John Doe"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm transition-colors',
+              fieldErrors.fullName
+                ? 'border-red-500 focus:ring-2 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+            ]"
+          />
+          <p
+            v-if="fieldErrors.fullName"
+            class="mt-1 text-xs text-red-600 font-medium"
+          >
+            {{ fieldErrors.fullName }}
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Email</label
+          >
+          <input
+            v-model="formData.email"
+            type="email"
+            placeholder="john@company.com"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm transition-colors',
+              fieldErrors.email
+                ? 'border-red-500 focus:ring-2 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+            ]"
+          />
+          <p
+            v-if="fieldErrors.email"
+            class="mt-1 text-xs text-red-600 font-medium"
+          >
+            {{ fieldErrors.email }}
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Password</label
+          >
+          <input
+            v-model="formData.password"
+            type="password"
+            placeholder="••••••••"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm transition-colors',
+              fieldErrors.password
+                ? 'border-red-500 focus:ring-2 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+            ]"
+          />
+          <p
+            v-if="fieldErrors.password"
+            class="mt-1 text-xs text-red-600 font-medium"
+          >
+            {{ fieldErrors.password }}
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          @click.prevent="handleRegister"
+          :disabled="isLoading"
+          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        >
+          {{ isLoading ? 'Registering...' : 'Register' }}
+        </button>
+      </form>
+
+      <div class="text-center text-sm text-gray-600">
+        Already have an account?
+        <RouterLink
+          to="/login"
+          class="font-semibold text-blue-600 hover:text-blue-500"
+          >Sign in</RouterLink
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter, RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import type { RegisterRequest } from '@/types';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const formData = ref<RegisterRequest>({
+  fullName: '',
+  email: '',
+  password: '',
+});
+
+const fieldErrors = ref<Record<string, string>>({});
+const generalError = ref('');
+const isLoading = ref(false);
+
+const handleRegister = async () => {
+  fieldErrors.value = {};
+  generalError.value = '';
+  isLoading.value = true;
+
+  try {
+    await authStore.register(formData.value);
+    router.push({ name: 'Login' });
+  } catch (err: any) {
+    const data = err.response?.data;
+
+    if (data?.errors && typeof data.errors === 'object') {
+      fieldErrors.value = data.errors;
+    } else if (data?.message) {
+      generalError.value = data.message;
+    } else {
+      generalError.value = 'An unexpected error occurred.';
+    }
+  } finally {
+    isLoading.value = false;
+  }
+};
+</script>
