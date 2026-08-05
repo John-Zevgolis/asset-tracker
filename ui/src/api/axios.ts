@@ -27,10 +27,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: unknown) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
       const isLoginRequest = error.config?.url?.includes('/auth/login');
 
-      if (!isLoginRequest) {
+      if ((status === 401 || status === 403) && !isLoginRequest) {
         localStorage.removeItem('token');
         router.push({ name: 'Login' });
       }
