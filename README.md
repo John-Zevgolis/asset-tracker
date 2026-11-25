@@ -30,7 +30,6 @@ A modern, full-stack, containerized web application designed for tracking, manag
 
 ### **DevOps & Infrastructure**
 * **Containerization:** Docker & Docker Compose
-* **Cloud Hosting:** Railway Ready
 
 ---
 
